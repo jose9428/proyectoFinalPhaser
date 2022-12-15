@@ -114,7 +114,7 @@ export class Game1 extends Phaser.Scene{
     }
 
     colisionJugadorBomba(jugador , bomba){
-        this.objVidas.disminuirVidas(2);
+        this.objVidas.disminuirVidas(1);
         this.crearReiniciar();
     }
 
