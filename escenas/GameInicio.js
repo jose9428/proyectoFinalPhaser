@@ -36,7 +36,7 @@ export class GameInicio extends Phaser.Scene {
         });
         this.startButton.on('pointerdown', () => {
             localStorage.setItem('puntos', 0);
-            localStorage.setItem('vidas', 3);
+            localStorage.setItem('vidas', 4);
             this.scene.start('game1');
             this.music.stop();
         });

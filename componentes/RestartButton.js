@@ -18,6 +18,8 @@ export class RestartButton {
             this.startButton.setFrame(0);
         });
         this.startButton.on('pointerdown', () => {
+            localStorage.setItem('puntos', 0);
+            localStorage.setItem('vidas', 4);
             this.escena.scene.start('game1');
             // Apagar la musica del GameOver
             music.stop();

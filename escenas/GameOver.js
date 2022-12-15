@@ -21,6 +21,13 @@ export class GameOver extends Phaser.Scene {
         this.add.image(710, 260, 'imagen_inicio_2');
         this.add.image(400, 180, 'immagen_gameover');
 
+        var puntos =  localStorage.getItem('puntos');
+        this.add.text(290,20,'PUNTAJE OBTENIDO: '+puntos,{
+            fontSize:'20px',
+            fill:'#fff',
+            fontFamily:'verdana, arial, sans-serif'
+        });
+
         this.startButton = this.add.sprite(400, 350, 'button_jugar').setInteractive();
 
         this.musicGame = this.sound.add('sonido_game_over');
@@ -36,7 +43,7 @@ export class GameOver extends Phaser.Scene {
         });
         this.startButton.on('pointerdown', () => {
             localStorage.setItem('puntos', 0);
-            localStorage.setItem('vidas', 3);
+            localStorage.setItem('vidas', 4);
             this.scene.start('game1');
             this.musicGame.stop();
         });

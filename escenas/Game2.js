@@ -1,9 +1,9 @@
 import { Marcador } from "../componentes/Marcador.js";
 import { Vidas } from "../componentes/Vidas.js";
 
-export class Game1 extends Phaser.Scene{
+export class Game2 extends Phaser.Scene{
     constructor(){
-        super({key: 'game1'});
+        super({key: 'game2'});
     }
 
     init(){
@@ -13,19 +13,20 @@ export class Game1 extends Phaser.Scene{
     }
 
     preload(){
-        this.load.image('fondo_nivel_1', 'images/fondo_nivel_1.jpg');
+        this.load.image('fondo_nivel_2', 'images/fondo_nivel_2.jpg');
         this.load.image('bloque', 'images/guacamayo_salvar.jpg');
         this.load.image('bomba', 'images/bomba.png');
         this.load.image('casa', 'images/casa.png');
         this.load.spritesheet('jugador', 'images/sprite_mario.png', 
             { frameWidth: 32, frameHeight: 44 }
         );
+   
 
-        this.load.audio('sonido_principal_1','sonidos/principal_1.mp3');
+        this.load.audio('sonido_principal_2','sonidos/principal_2.mp3');
     }
 
     crearBloques(){
-        for(var i = 0; i<5;i++){
+        for(var i = 0; i<7;i++){
             let x = Phaser.Math.Between(10, 700);
             let y = Phaser.Math.Between(40, 300);
             this.bloques.create(x, y, 'bloque');
@@ -34,18 +35,18 @@ export class Game1 extends Phaser.Scene{
 
 
     agregarVelocidadBomba(){
-        let velocity = 100 * Phaser.Math.Between(1.3 , 2);
-        if(Phaser.Math.Between(0,10) > 5){
+        let velocity = 260 * Phaser.Math.Between(1.3 , 2);
+        if(Phaser.Math.Between(0,15) > 5){
             velocity = 0 - velocity;
         }
-        this.bomba.setVelocity(velocity , 10); 
+        this.bomba.setVelocity(velocity , 20); 
     }
 
     create(){ 
         this.physics.world.setBoundsCollision(true,true,true,true);
-        this.add.image(400 , 250, 'fondo_nivel_1');
+        this.add.image(400 , 250, 'fondo_nivel_2');
 
-        this.add.text(350,2,'NIVEL 1',{
+        this.add.text(350,2,'NIVEL 2',{
             fontSize:'20px',
             fill:'#fff',
             fontFamily:'verdana, arial, sans-serif'
@@ -54,7 +55,7 @@ export class Game1 extends Phaser.Scene{
         this.objMarcador.create();
         this.objVidas.create();
 
-        this.musicGame = this.sound.add('sonido_principal_1');
+        this.musicGame = this.sound.add('sonido_principal_2');
         this.musicGame.loop = true;
         this.musicGame.volume = 1.0; 
         this.musicGame.play(); 
@@ -114,7 +115,7 @@ export class Game1 extends Phaser.Scene{
     }
 
     colisionJugadorBomba(jugador , bomba){
-        this.objVidas.disminuirVidas(2);
+        this.objVidas.disminuirVidas(1);
         this.crearReiniciar();
     }
 
@@ -133,11 +134,20 @@ export class Game1 extends Phaser.Scene{
             this.jugador.setFrame(3);
         }else{
             this.jugador.setVelocityX(0); 
-            this.jugador.setVelocityY(0); 
+            this.jugador.setVelocityY(0);
         }
 
         if(!this.objVidas.tieneVidas()){
             this.gameOver();
+        }
+        this.tiempo++;
+
+        if(this.tiempo % 400 == 0){
+           this.agregarVelocidadBomba();
+      
+           if(this.bomba.y >=350){
+                this.bomba.y = this.bomba.y * -1;
+           }
         }
     }
 
@@ -148,6 +158,6 @@ export class Game1 extends Phaser.Scene{
 
     nextNivel(){
         this.musicGame.stop(); 
-        this.scene.start('game2');      
+        this.scene.start('game3');      
     }
 }

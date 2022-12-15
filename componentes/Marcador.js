@@ -24,7 +24,7 @@ export class Marcador{
     }
 
     getPuntos(){
-        debugger
+        
         var punto =  localStorage.getItem('puntos');
 
         if(punto == undefined ||  punto == null){

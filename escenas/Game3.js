@@ -1,9 +1,9 @@
 import { Marcador } from "../componentes/Marcador.js";
 import { Vidas } from "../componentes/Vidas.js";
 
-export class Game1 extends Phaser.Scene{
+export class Game3 extends Phaser.Scene{
     constructor(){
-        super({key: 'game1'});
+        super({key: 'game3'});
     }
 
     init(){
@@ -13,19 +13,20 @@ export class Game1 extends Phaser.Scene{
     }
 
     preload(){
-        this.load.image('fondo_nivel_1', 'images/fondo_nivel_1.jpg');
+        this.load.image('fondo_nivel_3', 'images/fondo_nivel_3.jpg');
         this.load.image('bloque', 'images/guacamayo_salvar.jpg');
         this.load.image('bomba', 'images/bomba.png');
         this.load.image('casa', 'images/casa.png');
         this.load.spritesheet('jugador', 'images/sprite_mario.png', 
             { frameWidth: 32, frameHeight: 44 }
         );
+   
 
-        this.load.audio('sonido_principal_1','sonidos/principal_1.mp3');
+        this.load.audio('sonido_principal_3','sonidos/principal_3.webm');
     }
 
     crearBloques(){
-        for(var i = 0; i<5;i++){
+        for(var i = 0; i<8;i++){
             let x = Phaser.Math.Between(10, 700);
             let y = Phaser.Math.Between(40, 300);
             this.bloques.create(x, y, 'bloque');
@@ -33,19 +34,27 @@ export class Game1 extends Phaser.Scene{
     }
 
 
-    agregarVelocidadBomba(){
-        let velocity = 100 * Phaser.Math.Between(1.3 , 2);
+    agregarVelocidadBomba1(){
+        let velocity = 90 * Phaser.Math.Between(1.3 , 2);
         if(Phaser.Math.Between(0,10) > 5){
             velocity = 0 - velocity;
         }
-        this.bomba.setVelocity(velocity , 10); 
+        this.bomba1.setVelocity(velocity , 10); 
+    }
+
+    agregarVelocidadBomba2(){
+        let velocity = 90 * Phaser.Math.Between(1.3 , 2);
+        if(Phaser.Math.Between(0,10) > 5){
+            velocity = 0 - velocity;
+        }
+        this.bomba2.setVelocity(velocity , 10); 
     }
 
     create(){ 
         this.physics.world.setBoundsCollision(true,true,true,true);
-        this.add.image(400 , 250, 'fondo_nivel_1');
+        this.add.image(400 , 250, 'fondo_nivel_3');
 
-        this.add.text(350,2,'NIVEL 1',{
+        this.add.text(350,2,'NIVEL 3',{
             fontSize:'20px',
             fill:'#fff',
             fontFamily:'verdana, arial, sans-serif'
@@ -54,7 +63,7 @@ export class Game1 extends Phaser.Scene{
         this.objMarcador.create();
         this.objVidas.create();
 
-        this.musicGame = this.sound.add('sonido_principal_1');
+        this.musicGame = this.sound.add('sonido_principal_3');
         this.musicGame.loop = true;
         this.musicGame.volume = 1.0; 
         this.musicGame.play(); 
@@ -72,29 +81,36 @@ export class Game1 extends Phaser.Scene{
         this.casa.setCollideWorldBounds(true);
         this.casa.visible = false;
 
-        this.bomba = this.physics.add.image(780,0,'bomba');
-        this.bomba.setCollideWorldBounds(true);
-        this.bomba.setBounce(1);
-        this.agregarVelocidadBomba();
+        this.bomba1 = this.physics.add.image(780,0,'bomba');
+        this.bomba1.setCollideWorldBounds(true);
+        this.bomba1.setBounce(1);
+        this.agregarVelocidadBomba1();
+
+        this.bomba2 = this.physics.add.image(0,0,'bomba');
+        this.bomba2.setCollideWorldBounds(true);
+        this.bomba2.setBounce(1);
+        this.agregarVelocidadBomba2();
 
         this.cursors = this.input.keyboard.createCursorKeys();
 
 
         // Colision
         this.physics.add.collider(this.jugador, this.bloques, this.colisionJugadorBloque, null, this);
-        this.physics.add.collider(this.jugador, this.bomba, this.colisionJugadorBomba, null, this);
+        this.physics.add.collider(this.jugador, this.bomba1, this.colisionJugadorBomba1, null, this);
+        this.physics.add.collider(this.jugador, this.bomba2, this.colisionJugadorBomba2, null, this);
         this.physics.add.collider(this.jugador, this.casa, this.colisionJugadorCasa, null, this);
-   
+        this.physics.add.collider(this.bomba1, this.bomba2, null, null, this);
+       
     }
 
     crearReiniciar(){
         this.jugador.x = 400;
         this.jugador.y = 480;
         this.jugador.setFrame(2); 
-        this.bomba.x = 780;
-        this.bomba.y = 0;
+        this.bomba1.x = 780;
+        this.bomba1.y = 0;
         
-        this.agregarVelocidadBomba();
+        this.agregarVelocidadBomba1();
     }
 
     colisionJugadorBloque(jugador,bloque){
@@ -113,9 +129,17 @@ export class Game1 extends Phaser.Scene{
         
     }
 
-    colisionJugadorBomba(jugador , bomba){
-        this.objVidas.disminuirVidas(2);
+    colisionJugadorBomba1(jugador , bomba1){
+        this.objVidas.disminuirVidas(1);
         this.crearReiniciar();
+    }
+    colisionJugadorBomba2(jugador , bomba2){
+        this.objVidas.disminuirVidas(1);
+        this.jugador.x = 400;
+        this.jugador.y = 480;
+        this.jugador.setFrame(2); 
+        this.bomba2.x = 0;
+        this.bomba2.y = 0;
     }
 
     update(){
@@ -148,6 +172,6 @@ export class Game1 extends Phaser.Scene{
 
     nextNivel(){
         this.musicGame.stop(); 
-        this.scene.start('game2');      
+        this.scene.start('game4');      
     }
 }
